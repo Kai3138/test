@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h2 align="center"> <a href="https://arxiv.org/abs/2503.17340">Align Your Rhythm: Generating Highly Aligned Dance Poses with Gating-Enhanced  <a href="https://arxiv.org/abs/2503.17340"> Rhythm-Aware Feature Representation </a>
 
 <h3 align="center">
@@ -141,3 +142,7 @@ If you find our work useful in your research, please consider giving a star :sta
       year={2025}
     }
 ```
+=======
+# Danceba-main
+这是一个用于代码改进和测试的仓库
+>>>>>>> 8c907e09cff1e2f078de0fd928fb564c9e225eef
