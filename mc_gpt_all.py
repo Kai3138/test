@@ -489,7 +489,8 @@ class MCTall():
                 external_wav=self.config.external_wav if hasattr(self.config, 'external_wav') else None, \
                 external_wav_rate=external_wav_rate, \
                 music_normalize=self.config.music_normalize if hasattr(self.config, 'music_normalize') else False, \
-                wav_padding=self.config.wav_padding * (self.config.ds_rate // self.config.music_relative_rate) if hasattr(self.config, 'wav_padding') else 0 )
+                wav_padding=self.config.wav_padding * (self.config.ds_rate // self.config.music_relative_rate) if hasattr(self.config, 'wav_padding') else 0,\
+                mert_wav=self.config.mert_wav if hasattr(self.config, 'mert_wav') else None )
         else:
             train_music_data, train_dance_data = load_data(
                 args_train.train_dir, 
@@ -511,7 +512,8 @@ class MCTall():
                 external_wav=config.external_wav if hasattr(self.config, 'external_wav') else None, \
                 external_wav_rate=self.config.external_wav_rate if hasattr(self.config, 'external_wav_rate') else 1, \
                 music_normalize=self.config.music_normalize if hasattr(self.config, 'music_normalize') else False,\
-                wav_padding=self.config.wav_padding * (self.config.ds_rate // self.config.music_relative_rate) if hasattr(self.config, 'wav_padding') else 0)
+                wav_padding=self.config.wav_padding * (self.config.ds_rate // self.config.music_relative_rate) if hasattr(self.config, 'wav_padding') else 0,\
+                mert_wav=self.config.mert_wav if hasattr(self.config, 'mert_wav') else None)
         
         else:    
             music_data, dance_data, dance_names = load_test_data(

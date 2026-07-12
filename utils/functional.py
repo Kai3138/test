@@ -538,8 +538,32 @@ def load_data(data_dir, interval=900, data_type='2D'):
     return music_data, dance_data
     # , [fn.replace('.json', '') for fn in fnames]
 
+def align_music_length(feat, target_len):
+    if len(feat) == target_len:
+        return feat.astype(np.float32)
 
-def load_data_aist(data_dir, interval=120, move=40, rotmat=False, external_wav=None, external_wav_rate=1, music_normalize=False, wav_padding=0):
+    src_x = np.linspace(0, 1, len(feat))
+    tgt_x = np.linspace(0, 1, target_len)
+
+    aligned = np.stack([
+        np.interp(tgt_x, src_x, feat[:, i])
+        for i in range(feat.shape[1])
+    ], axis=1)
+
+    return aligned.astype(np.float32)
+
+
+def concat_mert_music(np_music, mert_wav, music_id):
+    mert_path = os.path.join(mert_wav, music_id + ".json")
+    with open(mert_path, "r") as f:
+        sample_dict_mert = json.loads(f.read())
+
+    np_mert = np.array(sample_dict_mert["music_array"]).astype(np.float32)
+    np_mert = align_music_length(np_mert, len(np_music))
+
+    return np.concatenate([np_music.astype(np.float32), np_mert], axis=1)
+
+def load_data_aist(data_dir, interval=120, move=40, rotmat=False, external_wav=None, external_wav_rate=1, music_normalize=False, wav_padding=0, mert_wav=None):
     tot = 0
     music_data, dance_data = [], []
     fnames = sorted(os.listdir(data_dir))
@@ -562,7 +586,10 @@ def load_data_aist(data_dir, interval=120, move=40, rotmat=False, external_wav=N
                     sample_dict_wav = json.loads(ff.read())
                     np_music = np.array(sample_dict_wav['music_array']).astype(np.float32)
                     
-            
+            if mert_wav is not None:
+                music_id = fname.split('_')[-2]
+                np_music = concat_mert_music(np_music, mert_wav, music_id)
+                
             np_dance = np.array(sample_dict['dance_array'])
 
             if not rotmat:
@@ -667,7 +694,7 @@ def load_test_data(data_dir, data_type='2D'):
 
 
 
-def load_test_data_aist(data_dir, rotmat, move, external_wav=None, external_wav_rate=1, music_normalize=False, wav_padding=0):
+def load_test_data_aist(data_dir, rotmat, move, external_wav=None, external_wav_rate=1, music_normalize=False, wav_padding=0, mert_wav=None):
 
     tot = 0
     input_names = []
@@ -689,6 +716,10 @@ def load_test_data_aist(data_dir, rotmat, move, external_wav=None, external_wav_
                     sample_dict_wav = json.loads(ff.read())
                     np_music = np.array(sample_dict_wav['music_array'])
             
+            if mert_wav is not None:
+                music_id = fname.split('_')[-2]
+                np_music = concat_mert_music(np_music, mert_wav, music_id)
+
             if 'dance_array' in sample_dict:
                 np_dance = np.array(sample_dict['dance_array'])
                 if not rotmat:

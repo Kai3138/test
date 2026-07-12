@@ -10,6 +10,7 @@ ds_rate: 8
 epoch: 300
 expname: cc_motion_gpt
 external_wav: ./data/aistpp_music_feat_7.5fps # change
+mert_wav: ./data/aistpp_music_feat_7.5fps_mert
 external_wav_rate: 1
 global_vel: true
 log_per_updates: 1
@@ -17,7 +18,7 @@ loss_weight:
   mse_weight: 1
 move: 8
 music_normalize: false
-need_not_train_data: true # if train choose false
+need_not_train_data: false # if train choose false
 optimizer:
   kwargs:
     betas:
@@ -86,7 +87,7 @@ structure_generate:
     n_embd: 768
     n_head: 12
     n_layer: 6
-    n_music: 438
+    n_music: 1206
     n_music_emb: 768
     resid_pdrop: 0.1
     vocab_size_down: 512
@@ -103,10 +104,10 @@ structure_generate:
     vocab_size: 512
     vocab_size_down: 512
     vocab_size_up: 512
-  n_music: 438
+  n_music: 1206
   n_music_emb: 768
   name: CrossCondGPT2
-test_freq: 3
+test_freq: 300
 testing:
   ckpt_epoch: 0  # change
   height: 540
